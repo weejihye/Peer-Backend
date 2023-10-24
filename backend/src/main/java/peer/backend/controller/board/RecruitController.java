@@ -2,6 +2,7 @@ package peer.backend.controller.board;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +17,8 @@ import peer.backend.service.board.recruit.RecruitService;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,6 +31,23 @@ public class RecruitController {
     @GetMapping("/{recruit_id}")
     public RecruitResponce getRecruit(@PathVariable Long recruit_id){
         return  recruitService.getRecruit(recruit_id);
+    }
+
+    @ApiOperation(value = "", notes = "모집게시글을 불러온다.")
+    @GetMapping("/modify/{recruit_id}")
+    public RecruitResponce getRecruitForModify(@PathVariable Long recruit_id){
+        return  recruitService.getRecruit(recruit_id);
+    }
+
+    @ApiOperation(value = "", notes = "모집게시글을 불러온다.")
+    @GetMapping("/write")
+    public List<TagResponce> getTagList(){
+        List<TagResponce> result = new ArrayList<>();
+        result.add(new TagResponce("Java", "#9AFE2E"));
+        result.add(new TagResponce("JavaScript", "#045FB4"));
+        result.add(new TagResponce("React", "#FF8000"));
+        result.add(new TagResponce("SpringBoot", "#FE2EC8"));
+        return result;
     }
 
     @ApiOperation(value = "", notes = "조건에 따라 list를 반환한다.")

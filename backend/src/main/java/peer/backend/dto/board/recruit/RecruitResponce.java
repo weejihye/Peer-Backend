@@ -18,6 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 public class RecruitResponce {
     private String title;
+    private String name;
+    private String type;
     private int totalNumber;
     private RecruitStatus status;
     private String due;

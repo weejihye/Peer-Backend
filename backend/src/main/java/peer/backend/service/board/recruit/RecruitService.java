@@ -175,9 +175,11 @@ public class RecruitService {
     public RecruitResponce getRecruit(Long recruit_id){
         Recruit recruit = recruitRepository.findById(recruit_id).orElseThrow(() -> new NotFoundException("존재하지 않는 모집글입니다."));
         recruit.setHit(recruit.getHit() + 1);
+        int totalNumber = 0;
         List<RecruitRoleDTO> roleDtoList = new ArrayList<>();
         for (RecruitRole role: recruit.getRoles()) {
             roleDtoList.add(new RecruitRoleDTO(role.getName(), role.getNumber()));
+            totalNumber += role.getNumber();
         }
         List<RecruitInterviewDto> interviewDtoList = new ArrayList<>();
         for (RecruitInterview interview : recruit.getInterviews()){
@@ -187,10 +189,12 @@ public class RecruitService {
         //TODO:DTO 항목 추가 필요
         return RecruitResponce.builder()
                 .title(recruit.getTitle())
+                .type(recruit.getType().toString())
+                .name(recruit.getTeam().getName())
                 .content(recruit.getContent())
                 .region(recruit.getRegion())
                 .status(recruit.getStatus())
-                .totalNumber(recruit.getRoles().size())
+                .totalNumber(totalNumber)
                 .due(recruit.getDue())
                 .link(recruit.getLink())
                 .leader_id(recruit.getWriter().getId())
