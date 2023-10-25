@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import peer.backend.annotation.AuthorCheck;
 import peer.backend.dto.Board.Recruit.RecruitUpdateRequestDTO;
 import peer.backend.dto.board.recruit.*;
 import peer.backend.entity.user.User;
@@ -27,19 +29,20 @@ public class RecruitController {
     private final RecruitService recruitService;
     private final UserRepository userRepository;
 
-    @ApiOperation(value = "", notes = "모집게시글을 불러온다.")
+    @ApiOperation(value = "", notes = "특정 모집게시글을 불러온다.")
     @GetMapping("/{recruit_id}")
     public RecruitResponce getRecruit(@PathVariable Long recruit_id){
         return  recruitService.getRecruit(recruit_id);
     }
 
-    @ApiOperation(value = "", notes = "모집게시글을 불러온다.")
+    @ApiOperation(value = "", notes = "수정을 위한 모집글 정보를 불러온다.")
     @GetMapping("/modify/{recruit_id}")
-    public RecruitResponce getRecruitForModify(@PathVariable Long recruit_id){
+    @AuthorCheck(id = "{recruit_id}")
+    public RecruitResponce getRecruitForModify(@PathVariable Long recruit_id, Authentication auth){
         return  recruitService.getRecruit(recruit_id);
     }
 
-    @ApiOperation(value = "", notes = "모집게시글을 불러온다.")
+    @ApiOperation(value = "", notes = "모집글 작성을 위한 태그리스트를 작성한다.")
     @GetMapping("/write")
     public List<TagResponce> getTagList(){
         List<TagResponce> result = new ArrayList<>();
